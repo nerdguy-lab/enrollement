@@ -1,5 +1,4 @@
-
-from application import app
+from application import app, db
 # import render template
 from flask import render_template, request, json, Response
 
@@ -40,3 +39,18 @@ def api(idx=None):
     else:
         jdata = courseData[idx]
     return Response(json.dumps(jdata), mimetype="application/json")        
+
+class User(db.Document):
+    user_id     =   db.IntField( unique=True )
+    first_name  =   db.StringField( max_length=50 )
+    last_name   =   db.StringField( max_length=50 )
+    email       =   db.StringField( max_length=30 )
+    password    =   db.StringField( max_length=30 ) # pyright: ignore[reportAttributeAccessIssue]
+
+
+@app.route("/user")
+def user():
+    User(user_id=1, first_name="Christian", last_name="Hur", email="christianhur@uta.com", password="abc1234").save()
+    User(user_id=2, first_name="Christine", last_name="Koima", email="christinekoima@uta.com", password="password123").save()
+    users=User.objects.all()
+    return render_template("user.html", users=users)
