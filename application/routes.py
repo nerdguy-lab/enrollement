@@ -1,6 +1,6 @@
-from application import app, db
+from application import app
 # import render template
-from flask import render_template, request, json, Response
+from flask import render_template, request, json, Response, redirect, flash
 from application.models import User, Course, Enrollment
 from application.forms import LoginForm, RegisterForm
 
@@ -15,6 +15,12 @@ def index():
 @app.route("/login", method=["GET", "POST"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if request.form.get("email") == "test@uta.com":
+            flash("You are successfuly logged in!", "success")
+            return redirect("/index")
+        else:
+            flash("Sorry, somethin went wrong.","danger")
     return render_template("login.html", title="Login", form=form, login=True)
 
 @app.route("/courses/")
