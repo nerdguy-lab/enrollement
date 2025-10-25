@@ -9,11 +9,23 @@ courseData=[{"courseID":"1111","title":"PHP 111","description":"Intro to PHP","c
 
 @api.route('/api','/api/')
 class GetAndPost(Resource):
+    #Get All
     def get(self):
         return jsonify(User.objects.all())
+    
+    #Post All
+    def post(self):
+        data = api.payload
+    
+        user = User(user_id=data['user_id'], email=data['email'], first_name=data['first_name'], last_name=data['last_name'])
+        user.set_password(data['password'])
+        user.save()
+        return jsonify(User.objects(user_id=data['user_id']))
+
 
 @api.route('/api/<idx>')
 class GetUpdateDelete(Resource):
+    # Get one 
     def get(self,idx):
         return jsonify(User.objects(user_id=idx))
 
@@ -133,14 +145,14 @@ def enrollment():
 
     return render_template("enrollment.html", enrollment=True, title="Enrollment", classes=classes)
 
-@app.route("/api/")
-@app.route("/api/<idx>")
-def api(idx=None):
-    if idx == None:
-        jdata = courseData
-    else:
-        jdata = courseData[idx]
-    return Response(json.dumps(jdata), mimetype="application/json")        
+# @app.route("/api/")
+# @app.route("/api/<idx>")
+# def api(idx=None):
+#     if idx == None:
+#         jdata = courseData
+#     else:
+#         jdata = courseData[idx]
+#     return Response(json.dumps(jdata), mimetype="application/json")        
 
 
 
