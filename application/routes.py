@@ -1,4 +1,4 @@
-from application import app
+from application import app, db
 # import render template
 from flask import render_template, request, json, Response, redirect, flash
 from application.models import User, Course, Enrollment
@@ -16,8 +16,12 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if request.form.get("email") == "test@uta.com":
-            flash("You are successfuly logged in!", "success")
+        email = form.email.data
+        password = form.password.data
+
+        user = User.objects(email=email).first()
+        if user and user.get_password(password):
+            flash(f"{user.first_name}, you are successfuly logged in!", "success")
             return redirect("/index")
         else:
             flash("Sorry, somethin went wrong.","danger")
