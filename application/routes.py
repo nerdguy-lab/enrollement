@@ -29,8 +29,11 @@ def login():
 
 @app.route("/courses/")
 @app.route("/courses/<term>")
-def courses(term="Spring 2025"):
-    return render_template("courses.html", courseData=courseData, courses=True, term=term)
+def courses(term= None):
+    if term == None:
+        term="Spring 2025"
+    classes = Course.objects.order_by("+courseID")    
+    return render_template("courses.html", courseData=classes, courses=True, term=term)
 
 @app.route("/register", methods=["POST","GET"])
 def register():
