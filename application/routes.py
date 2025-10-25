@@ -25,8 +25,13 @@ class GetAndPost(Resource):
 
 @api.route('/api/<idx>')
 class GetUpdateDelete(Resource):
-    # Get one 
+    # Get  
     def get(self,idx):
+        return jsonify(User.objects(user_id=idx))
+    #Put 
+    def put(self,idx):
+        data = api.payload
+        User.objects(user_id=idx).ipdate(**data)
         return jsonify(User.objects(user_id=idx))
 
 @app.route("/")
