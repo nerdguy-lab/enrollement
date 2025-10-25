@@ -60,6 +60,7 @@ def register():
 def enrollment():
     courseID = request.form.get('courseID')
     courseTitle = request.form.get('title')
+    user_id = 1
 
     if courseID:
         if Enrollment.objects(user_id=user_id, courseID=courseID):
